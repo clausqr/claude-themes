@@ -11,8 +11,16 @@
       <span class="tr">v0.1</span>
     </header>
 
-    <main class="menu" role="radiogroup" aria-label="Phosphor variant">
-      <h1>SELECT PHOSPHOR:</h1>
+    <section id="scope" class="scope" aria-live="polite">
+      <label class="scope-line">
+        <input id="scope-toggle" type="checkbox" />
+        <span id="scope-label">DEFAULT</span>
+      </label>
+      <div id="scope-hint" class="scope-hint"></div>
+    </section>
+
+    <main class="menu" role="radiogroup" aria-label="Theme">
+      <h1 id="menu-title">SELECT THEME:</h1>
 
       <button class="item" data-variant="amber" type="button">
         <span class="bullet">[ ]</span>

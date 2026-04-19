@@ -88,11 +88,20 @@ no extension reload needed.
 Zero telemetry, zero network calls, zero permissions beyond `storage` and
 `https://claude.ai/*`.
 
+## Per-project binding
+
+Open a Claude project tab (`claude.ai/project/<id>`). Click the extension
+icon. Tick **"Use for this project"** — the popup now writes your theme
+choice only for that project ID. Other projects keep whatever they were
+on; unbound tabs use the default.
+
+Internally: `chrome.storage.sync` holds `{ default, perProject }`.
+`content.js` polls `location.pathname` every 500ms (claude.ai navigates
+via `pushState` without reloading) and reapplies the right theme when
+you move between projects.
+
 ## Roadmap
 
-- [ ] **Per-project variant binding** — map `claude.ai/project/<id>` to
-      themes so each project auto-loads its own palette. The headline
-      feature. Pre-launch blocker.
 - [ ] Chrome Web Store + Firefox AMO listings (see [RELEASE.md](docs/RELEASE.md)).
 - [ ] Community themes: Solarized, Dracula, Nord, Apple II, C64,
       Atari ST, NeXT. Contributions welcome.

@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "name": "Claude Themes",
-  "version": "0.2.0",
-  "description": "A growing catalog of themes for claude.ai. Launch pack: MS-DOS phosphor (amber, green, white, CGA), CRT, and synthwave. Per-tab switch.",
+  "version": "0.3.0",
+  "description": "A growing catalog of themes for claude.ai. Bind a theme per project so tabs are distinguishable at a glance. Amber / Green / White / CGA / CRT / Synthwave.",
   "host_permissions": ["https://claude.ai/*"],
-  "permissions": ["storage"],
+  "permissions": ["storage", "activeTab"],
   "content_scripts": [
     {
       "matches": ["https://claude.ai/*"],
@@ -27,7 +27,7 @@
   },
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "Claude MS-DOS 3.3",
+    "default_title": "Claude Themes",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
@@ -42,7 +42,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "claude-msdos-33@local"
+      "id": "claude-themes@local"
     }
   }
 }

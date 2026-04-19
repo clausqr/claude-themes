@@ -2,28 +2,25 @@
 
 ## Pre-launch gate (must ship before v1.0)
 
-These are blockers for a credible public launch, not nice-to-haves:
+Remaining blockers for a credible public launch:
 
-1. **Per-project variant binding.** The README + promo copy leans on the
-   "different color per project" pitch. Today the extension stores one
-   global variant. Fix: persist a map `{ "project_<id>": "amber", ... }`
-   in `chrome.storage.sync`, detect the active project from the URL in
-   `content.js`, apply the bound variant when matched. Fall back to the
-   global default.
-2. **Privacy policy.** Required by Chrome Web Store any time an extension
+1. **Privacy policy.** Required by Chrome Web Store any time an extension
    uses `storage`, `host_permissions`, or touches a specific site. Short
    page at `docs/PRIVACY.md` (one-liner: extension stores the chosen
-   variant locally via `chrome.storage.sync`, no telemetry, no network
-   calls, no data leaves the device). Host at GitHub Pages: URL goes in
-   both store listings.
-3. **MxPlus bitmap font bundled.** Today it's a "drop it in yourself"
-   situation, which means 95% of installs will never see the real bitmap
-   look. Confirm CC BY-SA redistribution inside an extension bundle is OK
-   (it is), bundle it, include `extension/fonts/LICENSE-MXPLUS.txt` with
-   the CC BY-SA 4.0 text + VileR credit.
-4. **Screenshots + demo GIF.** Non-negotiable for both stores. See
-   "Assets" below.
-5. **Version bump to 1.0.0** in `manifest.json` + git tag.
+   theme + per-project bindings locally via `chrome.storage.sync`, no
+   telemetry, no network calls, no data leaves the device). Host at
+   GitHub Pages: URL goes in both store listings.
+2. **Screenshots + demo GIF.** Non-negotiable for both stores. See
+   "Assets" below. The per-project pitch wants a "three tabs, three
+   palettes" composite as the hero.
+3. **Version bump to 1.0.0** in `manifest.json` + git tag.
+
+**Shipped (v0.3):**
+- ✅ Per-project binding: map `claude.ai/project/<id>` → theme via
+  popup's "Use for this project" toggle. Auto-reapplies on SPA
+  navigation.
+- ✅ VT323 bitmap font bundled (OFL 1.1, no user-side install).
+- ✅ Six themes: Amber, Green, White, CGA, CRT, Synthwave.
 
 ## Chrome Web Store submission
 
