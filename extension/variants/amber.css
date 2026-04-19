@@ -1,0 +1,12 @@
+/* Amber phosphor — IBM 5151 monochrome monitor (1981). */
+html[data-phosphor="amber"] {
+  --phosphor-bg: #0a0500;
+  --phosphor-bg-raised: #1a0d00;
+  --phosphor-bg-inset: #050200;
+  --phosphor-fg: #ffb000;
+  --phosphor-fg-dim: #c88500;
+  --phosphor-fg-bright: #ffd070;
+  --phosphor-accent: #ffb000;
+  --phosphor-destructive: #ff6030;
+  --phosphor-border: #c88500;
+}

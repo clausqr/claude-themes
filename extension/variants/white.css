@@ -1,0 +1,12 @@
+/* White / paper-white phosphor — IBM MDA, classic grayscale terminal. */
+html[data-phosphor="white"] {
+  --phosphor-bg: #0a0a0a;
+  --phosphor-bg-raised: #151515;
+  --phosphor-bg-inset: #050505;
+  --phosphor-fg: #e6e6e6;
+  --phosphor-fg-dim: #a8a8a8;
+  --phosphor-fg-bright: #ffffff;
+  --phosphor-accent: #e6e6e6;
+  --phosphor-destructive: #ff8080;
+  --phosphor-border: #a8a8a8;
+}

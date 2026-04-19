@@ -1,0 +1,12 @@
+/* Green phosphor — Hercules / generic P1 monochrome monitor. */
+html[data-phosphor="green"] {
+  --phosphor-bg: #001a00;
+  --phosphor-bg-raised: #002800;
+  --phosphor-bg-inset: #000d00;
+  --phosphor-fg: #33ff33;
+  --phosphor-fg-dim: #00cc00;
+  --phosphor-fg-bright: #90ff90;
+  --phosphor-accent: #33ff33;
+  --phosphor-destructive: #ff5555;
+  --phosphor-border: #00cc00;
+}

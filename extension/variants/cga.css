@@ -1,0 +1,40 @@
+/* CGA palette 1 (high-intensity) — black, white, cyan, magenta.
+   Semantic mapping (decided with the user):
+     - white     = body text (fg)
+     - cyan      = accents, links, selected state
+     - magenta   = destructive, errors
+     - black     = background
+*/
+html[data-phosphor="cga"] {
+  --phosphor-bg: #000000;
+  --phosphor-bg-raised: #000055;
+  --phosphor-bg-inset: #000000;
+  --phosphor-fg: #ffffff;
+  --phosphor-fg-dim: #aaaaaa;
+  --phosphor-fg-bright: #ffffff;
+  --phosphor-accent: #55ffff;   /* cyan */
+  --phosphor-destructive: #ff55ff; /* magenta */
+  --phosphor-border: #55ffff;   /* cyan chrome */
+}
+
+/* CGA-specific: accent color actually shows on links, buttons, borders */
+html[data-phosphor="cga"] a {
+  color: #55ffff !important;
+}
+html[data-phosphor="cga"] a:hover {
+  background: #55ffff !important;
+  color: #000000 !important;
+}
+html[data-phosphor="cga"] button:hover,
+html[data-phosphor="cga"] [role="button"]:hover {
+  background: #55ffff !important;
+  color: #000000 !important;
+}
+html[data-phosphor="cga"] ::selection {
+  background: #ff55ff !important;
+  color: #000000 !important;
+}
+html[data-phosphor="cga"] .dos-status-bar {
+  background: #55ffff !important;
+  color: #000000 !important;
+}

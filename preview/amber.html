@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+  Offline preview shell. DO NOT open this file directly — open
+  preview/amber.html, preview/green.html, preview/white.html, or
+  preview/cga.html. Each of those injects this DOM and sets data-phosphor.
+
+  This is a synthetic fixture of claude.ai-ish structure. We reproduce the
+  selectors our theme targets (class names, roles, data attrs) so we can
+  iterate on content.css without opening the live site.
+-->
+<html data-phosphor="amber" data-theme="claude" data-mode="dark" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Claude MS-DOS 3.3 — preview</title>
+    <link rel="stylesheet" href="../extension/content.css" />
+    <link rel="stylesheet" href="../extension/variants/amber.css" />
+    <link rel="stylesheet" href="../extension/variants/green.css" />
+    <link rel="stylesheet" href="../extension/variants/white.css" />
+    <link rel="stylesheet" href="../extension/variants/cga.css" />
+  </head>
+  <body class="bg-bg-100 text-text-100 font-ui min-h-screen">
+    <div class="code-page-root" style="display:grid; grid-template-columns: 240px 1fr; min-height: 100vh;">
+
+      <!-- Sidebar -->
+      <aside class="flex-shrink-0 bg-bg-200 border-r-[0.5px] border-border-300" style="padding: 12px;">
+        <h2>RECENT</h2>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li><a href="#">&gt; Design DIY subwoofer</a></li>
+          <li><a href="#">&gt; ultraplan: Review plan</a></li>
+          <li><a href="#">&gt; Refactor auth middleware</a></li>
+          <li><a href="#">&gt; Claude MS-DOS theme</a></li>
+        </ul>
+        <hr />
+        <h2>PROJECTS</h2>
+        <ul style="list-style:none; padding:0; margin:0;">
+          <li><a href="#">&gt; claude-themes</a></li>
+          <li><a href="#">&gt; subwoofer-sim</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main conversation -->
+      <main style="padding: 16px; display: flex; flex-direction: column; gap: 16px;">
+        <h1>ultraplan: Review and start execution of plan</h1>
+
+        <!-- User message -->
+        <section class="bg-bg-300 rounded-2xl" data-testid="user-turn" style="padding: 12px;">
+          <div class="font-user-message">
+            plan this: MS-DOS 3.3 theme for claude.ai
+          </div>
+        </section>
+
+        <!-- Assistant message -->
+        <section role="region" aria-label="assistant-turn" class="prose-none" style="padding: 12px;">
+          <div class="font-claude-response">
+            <p>Here's the locked-in plan and what's open for refinement:</p>
+            <h2>Locked</h2>
+            <ul>
+              <li>Four phosphor variants ship together.</li>
+              <li>Delivery is a Manifest V3 browser extension.</li>
+              <li>ref/ is the offline rendering target.</li>
+              <li>Aesthetic: MS-DOS 3.3 — bitmap font, zero radii, zero shadows.</li>
+            </ul>
+            <h2>Open for refinement</h2>
+            <ol>
+              <li>Bitmap font choice + licensing.</li>
+              <li>Switching mechanism.</li>
+              <li>CGA palette semantics.</li>
+              <li>How aggressive to be on <code>!important</code>.</li>
+            </ol>
+
+            <h3>Code sample</h3>
+            <pre><code>html[data-phosphor="amber"] {
+  --phosphor-fg: #ffb000;
+  --phosphor-bg: #0a0500;
+}</code></pre>
+
+            <p>See the <a href="#">full inventory</a> for details.</p>
+
+            <h3>Comparison table</h3>
+            <table>
+              <thead>
+                <tr><th>Variant</th><th>FG</th><th>BG</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Amber</td><td>#ffb000</td><td>#0a0500</td></tr>
+                <tr><td>Green</td><td>#33ff33</td><td>#001a00</td></tr>
+                <tr><td>White</td><td>#e6e6e6</td><td>#0a0a0a</td></tr>
+                <tr><td>CGA</td><td>#ffffff</td><td>#000000</td></tr>
+              </tbody>
+            </table>
+
+            <p>
+              <button type="button">Accept plan</button>
+              <button type="button">Reject</button>
+              <button type="button" disabled>Pending…</button>
+            </p>
+          </div>
+        </section>
+
+        <!-- Composer / input -->
+        <form id="turn-form" class="relative bg-bg-000 rounded-lg" style="padding: 8px;">
+          <div class="ProseMirror" contenteditable="true" style="min-height: 80px; outline: none;">
+            Type your message here…
+          </div>
+          <div style="display:flex; justify-content: space-between; margin-top: 6px;">
+            <span style="opacity: 0.7;">claude-opus-4-7 · 1M context</span>
+            <button type="button">Send</button>
+          </div>
+        </form>
+
+        <!-- Fake dialog -->
+        <div role="dialog" aria-label="Settings preview" style="padding: 10px; max-width: 320px;">
+          <h3>SETTINGS</h3>
+          <label><input type="checkbox" /> Enable scanlines</label><br />
+          <label><input type="checkbox" checked /> Blink cursor</label><br />
+          <label><input type="text" value="640K" style="width: 120px;" /></label>
+        </div>
+      </main>
+    </div>
+
+    <!-- Fake status bar (content script normally injects this) -->
+    <div id="dos-status-bar" class="dos-status-bar" data-variant="AMBER"></div>
+  </body>
+</html>

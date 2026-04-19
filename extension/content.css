@@ -1,0 +1,478 @@
+/* =============================================================================
+   Claude MS-DOS 3.3 — content.css
+   Core theme: font, resets, variable remap, DOM decorations.
+   Variant files (variants/*.css) override phosphor palette under
+   html[data-phosphor="<variant>"].
+   ============================================================================= */
+
+/* ---------- Bitmap font ----------------------------------------------------
+   Ship a bitmap DOS font inside the extension. Expected file:
+     fonts/PerfectDOSVGA437.ttf
+   If absent, the stack falls back to common monospace faces. The theme is
+   still legible without the bitmap TTF, it just loses the pixelated feel.
+   --------------------------------------------------------------------------- */
+@font-face {
+  font-family: "DOS VGA";
+  src: url("fonts/PerfectDOSVGA437.ttf") format("truetype");
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root,
+html,
+html[data-theme="claude"] {
+  /* ---- Radii: collapse every rounded-corner token to 0 ------------------- */
+  --r0: 0 !important;
+  --r1: 0 !important;
+  --r2: 0 !important;
+  --r3: 0 !important;
+  --r4: 0 !important;
+  --r5: 0 !important;
+  --r6: 0 !important;
+  --r7: 0 !important;
+  --r8: 0 !important;
+  --radius-sm: 0 !important;
+  --radius-md: 0 !important;
+  --radius-lg: 0 !important;
+  --radius-xl: 0 !important;
+  --radius-full: 0 !important;
+
+  /* ---- Font families: everything becomes the DOS bitmap stack ----------- */
+  --font-ui: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
+    ui-monospace, Consolas, "Courier New", monospace !important;
+  --font-mono: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
+    ui-monospace, Consolas, "Courier New", monospace !important;
+  --font-ui-serif: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
+    ui-monospace, Consolas, "Courier New", monospace !important;
+  --font-claude-response: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
+    ui-monospace, Consolas, "Courier New", monospace !important;
+  --font-user-message: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
+    ui-monospace, Consolas, "Courier New", monospace !important;
+
+  /* Default palette = amber (IBM 5151). Variant files override these. */
+  --phosphor-bg: #0a0500;
+  --phosphor-bg-raised: #140a00;
+  --phosphor-bg-inset: #050200;
+  --phosphor-fg: #ffb000;
+  --phosphor-fg-dim: #c88500;
+  --phosphor-fg-bright: #ffd070;
+  --phosphor-accent: #ffb000;
+  --phosphor-destructive: #ff6030;
+  --phosphor-border: #c88500;
+
+  /* ---- Surfaces (--z0..--z6): background ramp --------------------------- */
+  --z0: var(--phosphor-bg) !important;
+  --z1: var(--phosphor-bg) !important;
+  --z2: var(--phosphor-bg-raised) !important;
+  --z3: var(--phosphor-bg-raised) !important;
+  --z4: var(--phosphor-bg-inset) !important;
+  --z5: var(--phosphor-bg-inset) !important;
+  --z6: var(--phosphor-bg-inset) !important;
+
+  /* ---- Overlays (--t0..--t9): translucent phosphor ramp ----------------- */
+  --t0: color-mix(in srgb, var(--phosphor-fg) 4%, transparent) !important;
+  --t1: color-mix(in srgb, var(--phosphor-fg) 8%, transparent) !important;
+  --t2: color-mix(in srgb, var(--phosphor-fg) 14%, transparent) !important;
+  --t3: color-mix(in srgb, var(--phosphor-fg) 22%, transparent) !important;
+  --t4: color-mix(in srgb, var(--phosphor-fg) 32%, transparent) !important;
+  --t5: color-mix(in srgb, var(--phosphor-fg) 44%, transparent) !important;
+  --t6: color-mix(in srgb, var(--phosphor-fg) 58%, transparent) !important;
+  --t7: color-mix(in srgb, var(--phosphor-fg) 72%, transparent) !important;
+  --t8: color-mix(in srgb, var(--phosphor-fg) 86%, transparent) !important;
+  --t9: var(--phosphor-fg) !important;
+
+  /* ---- Accent + semantic roles ----------------------------------------- */
+  --accent: var(--phosphor-accent) !important;
+  --core-red: var(--phosphor-destructive) !important;
+  --extended-green: var(--phosphor-fg) !important;
+  --extended-pink: var(--phosphor-fg) !important;
+  --extended-purple: var(--phosphor-fg) !important;
+  --extended-yellow: var(--phosphor-fg) !important;
+
+  /* ---- Text role tokens ------------------------------------------------- */
+  --text-assistant-primary: var(--phosphor-fg) !important;
+  --text-assistant-secondary: var(--phosphor-fg-dim) !important;
+  --text-primary-default: var(--phosphor-fg) !important;
+  --text-secondary-default: var(--phosphor-fg-dim) !important;
+  --text-destructive-default: var(--phosphor-destructive) !important;
+  --border-default: var(--phosphor-border) !important;
+
+  /* ---- Background role tokens (Tailwind-ish aliases Claude uses) -------- */
+  --bg-000: var(--phosphor-bg) !important;
+  --bg-100: var(--phosphor-bg) !important;
+  --bg-200: var(--phosphor-bg-raised) !important;
+  --bg-300: var(--phosphor-bg-raised) !important;
+  --bg-400: var(--phosphor-bg-inset) !important;
+  --bg-500: var(--phosphor-bg-inset) !important;
+
+  --text-100: var(--phosphor-fg) !important;
+  --text-200: var(--phosphor-fg-dim) !important;
+  --text-300: var(--phosphor-fg-dim) !important;
+  --text-400: var(--phosphor-fg-dim) !important;
+  --text-500: var(--phosphor-fg-dim) !important;
+
+  --border-100: var(--phosphor-border) !important;
+  --border-200: var(--phosphor-border) !important;
+  --border-300: var(--phosphor-border) !important;
+  --border-400: var(--phosphor-border) !important;
+
+  color-scheme: dark;
+}
+
+/* ---------- Global resets --------------------------------------------------
+   Kill radii, shadows, filters, gradients, transitions on anything that
+   slips past the custom-property overrides via hard-coded Tailwind utilities.
+   --------------------------------------------------------------------------- */
+html, body {
+  background: var(--phosphor-bg) !important;
+  color: var(--phosphor-fg) !important;
+  font-family: var(--font-ui) !important;
+  -webkit-font-smoothing: none !important;
+  -moz-osx-font-smoothing: unset !important;
+  font-smooth: never !important;
+  text-rendering: optimizeSpeed !important;
+}
+
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Rounded utility families */
+[class*="rounded"],
+[class*="rounded-"],
+.rounded-full,
+.rounded-r1,
+.rounded-r2,
+.rounded-r3,
+.rounded-r4,
+.rounded-r5,
+.rounded-r6,
+.rounded-r7,
+.rounded-r8 {
+  border-radius: 0 !important;
+}
+
+/* Shadow utility families */
+.shadow-sm, .shadow, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl,
+.effect-shadow-small, .effect-shadow-large, .effect-stroke-shadow,
+.effect-prompt-blur, .effect-prompt-focus, .effect-primary-elevated,
+[class*="shadow-["] {
+  box-shadow: none !important;
+}
+
+/* Blur / filter utility families */
+.backdrop-filter, .blur, .filter,
+[class*="backdrop-blur"], [class*="backdrop-filter"], [class*="blur-"] {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  filter: none !important;
+}
+
+/* Gradient utility families */
+[class*="bg-gradient"], [class*="from-"], [class*="via-"], [class*="to-"] {
+  background-image: none !important;
+}
+
+/* Kill ring utilities (focus rings use box-shadow under the hood) */
+[class*="ring-"], [class*="ring"] {
+  --tw-ring-shadow: 0 0 0 0 transparent !important;
+  --tw-ring-offset-shadow: 0 0 0 0 transparent !important;
+}
+
+/* Transitions: snappy / none. DOS computers didn't fade. */
+*, *::before, *::after {
+  transition: none !important;
+}
+
+/* ---------- Typography ----------------------------------------------------- */
+body, input, textarea, select, button,
+.font-ui, .font-mono, .font-serif, .font-claude-response, .font-user-message {
+  font-family: var(--font-ui) !important;
+  font-variant-ligatures: none !important;
+  font-feature-settings: normal !important;
+  letter-spacing: 0 !important;
+}
+
+/* Pixelated bitmap fonts shouldn't be smoothed */
+* {
+  image-rendering: pixelated;
+}
+
+/* Headings: bolded but same bitmap font; underline with ASCII rule */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal !important;
+  color: var(--phosphor-fg-bright) !important;
+  text-transform: uppercase;
+}
+h1::before, h2::before {
+  content: "== ";
+  color: var(--phosphor-fg-dim);
+}
+h1::after, h2::after {
+  content: " ==";
+  color: var(--phosphor-fg-dim);
+}
+
+/* Links: inverted (classic DOS highlight) */
+a {
+  color: var(--phosphor-fg) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px !important;
+}
+a:hover {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+  text-decoration: none !important;
+}
+
+/* ---------- Buttons / inputs ---------------------------------------------- */
+button, [role="button"], input[type="submit"], input[type="button"] {
+  background: var(--phosphor-bg) !important;
+  color: var(--phosphor-fg) !important;
+  border: 1px solid var(--phosphor-border) !important;
+  padding: 2px 8px !important;
+  font-family: var(--font-ui) !important;
+}
+button:hover, [role="button"]:hover {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+}
+button:disabled, [role="button"][aria-disabled="true"] {
+  color: var(--phosphor-fg-dim) !important;
+  border-color: var(--phosphor-fg-dim) !important;
+  background: var(--phosphor-bg) !important;
+}
+
+input, textarea, select {
+  background: var(--phosphor-bg-inset) !important;
+  color: var(--phosphor-fg) !important;
+  border: 1px solid var(--phosphor-border) !important;
+  caret-color: var(--phosphor-fg) !important;
+}
+input:focus, textarea:focus, select:focus,
+input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 1px solid var(--phosphor-fg-bright) !important;
+  outline-offset: 0 !important;
+}
+
+/* ---------- ProseMirror composer ------------------------------------------ */
+.ProseMirror {
+  background: var(--phosphor-bg-inset) !important;
+  color: var(--phosphor-fg) !important;
+  caret-color: transparent !important; /* real caret hidden; we draw a block */
+  font-family: var(--font-ui) !important;
+}
+.ProseMirror *::selection {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+}
+
+/* Block caret: overlay a blinking square at the end of focused ProseMirror.
+   We abuse ::after on the focused element; position relative on the parent
+   wrapper isn't guaranteed, so use inline-block trickery with an empty span.
+   Claude's ProseMirror doesn't expose a caret span, so we settle for a
+   field-wide blinking cue via the input wrapper. */
+#turn-form:focus-within::after,
+.relative.bg-bg-000:focus-within::after {
+  content: "_";
+  color: var(--phosphor-fg);
+  animation: dos-caret-blink 1s steps(2, start) infinite;
+  position: absolute;
+  pointer-events: none;
+  font-family: var(--font-ui);
+}
+@keyframes dos-caret-blink {
+  to { visibility: hidden; }
+}
+
+/* ---------- Input box border (ASCII double-line) -------------------------- */
+#turn-form,
+.relative.bg-bg-000.rounded-lg,
+.relative.bg-bg-000 {
+  background: var(--phosphor-bg-inset) !important;
+  border: 2px double var(--phosphor-border) !important;
+  padding: 6px !important;
+  position: relative;
+}
+
+/* ---------- Sidebar ------------------------------------------------------- */
+.flex-shrink-0.bg-bg-200,
+aside,
+nav[aria-label],
+[data-sidebar] {
+  background: var(--phosphor-bg) !important;
+  border-right: 2px double var(--phosphor-border) !important;
+}
+
+/* ---------- Code blocks --------------------------------------------------- */
+pre, code, pre code, .hljs, [class*="code-block"] {
+  background: var(--phosphor-bg-inset) !important;
+  color: var(--phosphor-fg) !important;
+  border: 1px solid var(--phosphor-border) !important;
+  font-family: var(--font-ui) !important;
+}
+
+/* Flatten all syntax-highlighting token colors onto the phosphor */
+.hljs *, pre * {
+  color: var(--phosphor-fg) !important;
+  background: transparent !important;
+}
+
+/* ---------- Messages: bracketed [USER] / [CLAUDE] tags -------------------- */
+/* Hide the avatar graphics — DOS had no avatars */
+[data-testid="user-avatar"],
+[data-testid="assistant-avatar"],
+img[alt*="avatar" i],
+.avatar,
+[class*="avatar"] img,
+[class*="avatar"] svg {
+  display: none !important;
+}
+
+/* Assistant messages: region with assistant prose */
+[role="region"] [class*="prose"],
+[data-is-streaming],
+.font-claude-response {
+  color: var(--phosphor-fg) !important;
+}
+
+/* Prefix assistant regions with [CLAUDE] */
+[role="region"]:not([aria-label*="user" i])::before {
+  content: "[CLAUDE] ";
+  color: var(--phosphor-fg-dim);
+  font-family: var(--font-ui);
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+
+/* User message bubble: render as [USER] prefix */
+[data-testid*="user"] ::before,
+.font-user-message::before {
+  content: "[USER] ";
+  color: var(--phosphor-fg-dim);
+  letter-spacing: 1px;
+}
+
+/* Generic fallback for message-ish containers */
+.bg-bg-300.rounded-2xl::before,
+[class*="message"][class*="user"]::before {
+  content: "[USER] ";
+  color: var(--phosphor-fg-dim);
+  display: block;
+  font-family: var(--font-ui);
+  margin-bottom: 2px;
+}
+
+/* ---------- SVG icons: flatten to currentColor ---------------------------- */
+svg {
+  color: var(--phosphor-fg) !important;
+  fill: currentColor !important;
+}
+svg * {
+  fill: currentColor !important;
+  stroke: currentColor !important;
+}
+
+/* ---------- Scrollbars ---------------------------------------------------- */
+* {
+  scrollbar-color: var(--phosphor-fg-dim) var(--phosphor-bg-inset) !important;
+  scrollbar-width: thin !important;
+}
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+  background: var(--phosphor-bg-inset);
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--phosphor-fg-dim);
+  border: 1px solid var(--phosphor-bg-inset);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--phosphor-fg);
+}
+*::-webkit-scrollbar-corner {
+  background: var(--phosphor-bg-inset);
+}
+
+/* ---------- Selection ----------------------------------------------------- */
+::selection {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+}
+::-moz-selection {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+}
+
+/* ---------- Fake status bar ----------------------------------------------- */
+.dos-status-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  line-height: 18px;
+  padding: 0 8px;
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+  font-family: var(--font-ui) !important;
+  font-size: 12px !important;
+  z-index: 2147483647;
+  border-top: 1px solid var(--phosphor-border) !important;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  letter-spacing: 1px;
+}
+.dos-status-bar::before {
+  content: "C:\\CLAUDE>";
+}
+.dos-status-bar::after {
+  content: attr(data-variant) " │ MODE CO80 │ MEM 640K OK";
+}
+
+/* Give the page enough bottom padding to clear the status bar */
+body {
+  padding-bottom: 20px !important;
+}
+
+/* ---------- Dialogs / modals / dropdowns ---------------------------------- */
+[role="dialog"], [role="menu"], [role="listbox"], [role="tooltip"] {
+  background: var(--phosphor-bg) !important;
+  color: var(--phosphor-fg) !important;
+  border: 2px double var(--phosphor-border) !important;
+}
+[role="menuitem"]:hover, [role="option"]:hover,
+[role="menuitem"][data-highlighted], [role="option"][aria-selected="true"] {
+  background: var(--phosphor-fg) !important;
+  color: var(--phosphor-bg) !important;
+}
+
+/* ---------- HR / dividers: convert to ASCII rule -------------------------- */
+hr {
+  border: none !important;
+  border-top: 1px dashed var(--phosphor-border) !important;
+  height: 0 !important;
+  color: var(--phosphor-border) !important;
+}
+
+/* ---------- Tables -------------------------------------------------------- */
+table, th, td {
+  border: 1px solid var(--phosphor-border) !important;
+  background: var(--phosphor-bg) !important;
+  color: var(--phosphor-fg) !important;
+}
+th {
+  background: var(--phosphor-bg-raised) !important;
+  color: var(--phosphor-fg-bright) !important;
+  text-transform: uppercase;
+}
