@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Claude MS-DOS 3.3",
-  "version": "0.1.0",
-  "description": "Reskins claude.ai with a 1987 MS-DOS 3.3 phosphor aesthetic. Four variants: Amber, Green, White, CGA.",
+  "name": "Claude Themes",
+  "version": "0.2.0",
+  "description": "A growing catalog of themes for claude.ai. Launch pack: MS-DOS phosphor (amber, green, white, CGA), CRT, and synthwave. Per-tab switch.",
   "host_permissions": ["https://claude.ai/*"],
   "permissions": ["storage"],
   "content_scripts": [
@@ -13,7 +13,9 @@
         "variants/amber.css",
         "variants/green.css",
         "variants/white.css",
-        "variants/cga.css"
+        "variants/cga.css",
+        "variants/crt.css",
+        "variants/synthwave.css"
       ],
       "js": ["content.js"],
       "run_at": "document_start",

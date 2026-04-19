@@ -2,8 +2,8 @@
    previews regardless of which variant is active on the page. */
 
 @font-face {
-  font-family: "DOS VGA";
-  src: url("../fonts/PerfectDOSVGA437.ttf") format("truetype");
+  font-family: "VT323";
+  src: url("../fonts/VT323-Regular.ttf") format("truetype");
   font-display: swap;
 }
 
@@ -12,8 +12,8 @@ html, body {
   padding: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "DOS VGA", "IBM Plex Mono", ui-monospace, Consolas,
-    "Courier New", monospace;
+  font-family: "VT323", "DOS VGA", "IBM Plex Mono", ui-monospace,
+    Consolas, "Courier New", monospace;
   font-size: 14px;
   width: 240px;
   image-rendering: pixelated;
@@ -55,6 +55,39 @@ html[data-phosphor="cga"] {
   --fg-bright: #ffffff;
   --border: #55ffff;
   --accent: #55ffff;
+}
+html[data-phosphor="crt"] {
+  --bg: #001a00;
+  --bg-inset: #000d00;
+  --fg: #39ff55;
+  --fg-dim: #1ccc33;
+  --fg-bright: #b0ffc0;
+  --border: #1ccc33;
+  --accent: #39ff55;
+}
+html[data-phosphor="crt"] body {
+  text-shadow: 0 0 2px #39ff55, 0 0 6px rgba(57, 255, 85, 0.6);
+}
+html[data-phosphor="synthwave"] {
+  --bg: #0d0b1e;
+  --bg-inset: #05030a;
+  --fg: #f8f8ff;
+  --fg-dim: #05d9e8;
+  --fg-bright: #ff2a6d;
+  --border: #ff2a6d;
+  --accent: #05d9e8;
+}
+html[data-phosphor="synthwave"] body {
+  background: linear-gradient(to bottom, #0d0b1e 0%, #5f0a87 55%, #ff2a6d 80%, #05030a 100%);
+  text-shadow: 0 0 4px #05d9e8;
+}
+html[data-phosphor="synthwave"] .titlebar {
+  background: linear-gradient(to right, #ff2a6d, #ff00e1, #05d9e8);
+  color: #0d0b1e;
+}
+html[data-phosphor="synthwave"] .statusbar {
+  background: linear-gradient(to right, #ff2a6d, #ff00e1, #05d9e8);
+  color: #0d0b1e;
 }
 
 * {

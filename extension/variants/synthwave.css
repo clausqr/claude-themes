@@ -1,0 +1,228 @@
+/* ============================================================================
+   Synthwave / Outrun — 6th variant.
+   Pivots away from the MS-DOS monochrome lock-in: neon pink/cyan palette,
+   animated perspective grid floor, sunset-gradient sky background, neon
+   text-shadow glow. Still monospace, still ANSI-box message frames — BBS
+   heritage, just painted in 1986-mall-atrium colors.
+   ============================================================================ */
+
+html[data-phosphor="synthwave"] {
+  /* Palette */
+  --sw-sky-top: #0d0b1e;
+  --sw-sky-mid: #5f0a87;
+  --sw-horizon: #ff2a6d;
+  --sw-sun-a:   #ff6ec7;
+  --sw-sun-b:   #ffcc66;
+  --sw-ground:  #05030a;
+  --sw-pink:    #ff2a6d;
+  --sw-cyan:    #05d9e8;
+  --sw-magenta: #ff00e1;
+  --sw-purple:  #a020f0;
+
+  /* Map onto the theme's phosphor tokens */
+  --phosphor-bg: rgba(13, 11, 30, 0.0);        /* transparent so sky shows */
+  --phosphor-bg-raised: rgba(13, 11, 30, 0.55);
+  --phosphor-bg-inset: rgba(5, 3, 10, 0.65);
+  --phosphor-fg: #f8f8ff;                       /* body text: slight cool white */
+  --phosphor-fg-dim: #05d9e8;                   /* cyan for secondary */
+  --phosphor-fg-bright: #ff2a6d;                /* hot pink highlight */
+  --phosphor-accent: #ff2a6d;
+  --phosphor-destructive: #ff00e1;
+  --phosphor-border: #ff2a6d;
+}
+
+/* ---------- Sky + ground gradient background ------------------------------ */
+html[data-phosphor="synthwave"],
+html[data-phosphor="synthwave"] body {
+  background:
+    linear-gradient(
+      to bottom,
+      var(--sw-sky-top) 0%,
+      var(--sw-sky-mid) 35%,
+      var(--sw-horizon) 52%,
+      var(--sw-ground) 56%,
+      var(--sw-ground) 100%
+    ) fixed no-repeat !important;
+  color: var(--phosphor-fg) !important;
+}
+
+/* ---------- The Sun (fixed behind content) -------------------------------- */
+html[data-phosphor="synthwave"] body {
+  position: relative;
+}
+html[data-phosphor="synthwave"] body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Body::before draws the classic outrun sun: half-disc at the horizon with
+   horizontal stripes cut out (linear gradient mask). */
+html[data-phosphor="synthwave"] body::before {
+  content: "";
+  position: fixed;
+  left: 50%;
+  bottom: 42vh;                 /* sits on the horizon (56% from top) */
+  width: 420px;
+  height: 420px;
+  margin-left: -210px;
+  border-radius: 50% !important;  /* override our zero-radius rule — this is a sun */
+  background:
+    linear-gradient(to bottom, var(--sw-sun-b) 0%, var(--sw-sun-a) 60%, var(--sw-pink) 100%);
+  -webkit-mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0, #000 14px,
+    transparent 14px, transparent 18px,
+    #000 18px, #000 30px,
+    transparent 30px, transparent 36px,
+    #000 36px, #000 60px,
+    transparent 60px, transparent 70px,
+    #000 70px
+  );
+  mask-image: repeating-linear-gradient(
+    to bottom,
+    #000 0, #000 14px,
+    transparent 14px, transparent 18px,
+    #000 18px, #000 30px,
+    transparent 30px, transparent 36px,
+    #000 36px, #000 60px,
+    transparent 60px, transparent 70px,
+    #000 70px
+  );
+  z-index: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 40px var(--sw-pink)) drop-shadow(0 0 80px var(--sw-magenta));
+}
+
+/* ---------- The perspective grid floor ------------------------------------ */
+html[data-phosphor="synthwave"] body::after {
+  content: "";
+  position: fixed;
+  left: -50vw;
+  right: -50vw;
+  bottom: -20vh;
+  height: 60vh;
+  background-image:
+    linear-gradient(to right, var(--sw-cyan) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--sw-cyan) 1px, transparent 1px);
+  background-size: 64px 64px;
+  transform: perspective(420px) rotateX(58deg);
+  transform-origin: 50% 0%;
+  animation: sw-grid-scroll 2.8s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px var(--sw-cyan));
+}
+@keyframes sw-grid-scroll {
+  from { background-position: 0 0; }
+  to   { background-position: 0 64px; }
+}
+
+/* ---------- Neon text glow ------------------------------------------------ */
+html[data-phosphor="synthwave"] body,
+html[data-phosphor="synthwave"] p,
+html[data-phosphor="synthwave"] span,
+html[data-phosphor="synthwave"] div,
+html[data-phosphor="synthwave"] li,
+html[data-phosphor="synthwave"] td,
+html[data-phosphor="synthwave"] th,
+html[data-phosphor="synthwave"] code,
+html[data-phosphor="synthwave"] pre,
+html[data-phosphor="synthwave"] button,
+html[data-phosphor="synthwave"] label {
+  text-shadow:
+    0 0 2px var(--sw-cyan),
+    0 0 8px rgba(5, 217, 232, 0.6) !important;
+}
+
+html[data-phosphor="synthwave"] a {
+  color: var(--sw-cyan) !important;
+  text-shadow:
+    0 0 2px var(--sw-cyan),
+    0 0 10px var(--sw-cyan) !important;
+}
+html[data-phosphor="synthwave"] a:hover {
+  background: var(--sw-cyan) !important;
+  color: var(--sw-sky-top) !important;
+  text-shadow: none !important;
+}
+
+html[data-phosphor="synthwave"] h1,
+html[data-phosphor="synthwave"] h2,
+html[data-phosphor="synthwave"] h3,
+html[data-phosphor="synthwave"] h4,
+html[data-phosphor="synthwave"] h5,
+html[data-phosphor="synthwave"] h6 {
+  color: var(--sw-pink) !important;
+  text-shadow:
+    0 0 3px var(--sw-pink),
+    0 0 12px var(--sw-pink),
+    0 0 28px var(--sw-magenta) !important;
+  letter-spacing: 2px !important;
+}
+
+/* ---------- Neon-framed cards -------------------------------------------- */
+html[data-phosphor="synthwave"] #turn-form,
+html[data-phosphor="synthwave"] .relative.bg-bg-000,
+html[data-phosphor="synthwave"] [role="region"],
+html[data-phosphor="synthwave"] [role="dialog"],
+html[data-phosphor="synthwave"] [data-testid*="user"],
+html[data-phosphor="synthwave"] .bg-bg-300.rounded-2xl,
+html[data-phosphor="synthwave"] [class*="message"][class*="user"],
+html[data-phosphor="synthwave"] [class*="message"][class*="assistant"] {
+  background: rgba(13, 11, 30, 0.7) !important;
+  border-color: var(--sw-pink) !important;
+  box-shadow:
+    0 0 6px var(--sw-pink),
+    0 0 18px rgba(255, 42, 109, 0.5),
+    inset 0 0 12px rgba(5, 217, 232, 0.08) !important;
+}
+
+html[data-phosphor="synthwave"] aside {
+  background: rgba(13, 11, 30, 0.7) !important;
+  border-right-color: var(--sw-cyan) !important;
+  box-shadow: inset -1px 0 12px rgba(5, 217, 232, 0.3) !important;
+}
+
+/* Message legend stripes in neon */
+html[data-phosphor="synthwave"] [role="region"]::before,
+html[data-phosphor="synthwave"] [data-testid*="user"]::before,
+html[data-phosphor="synthwave"] .bg-bg-300.rounded-2xl::before {
+  background: var(--sw-sky-top) !important;
+  color: var(--sw-cyan) !important;
+  text-shadow: 0 0 4px var(--sw-cyan) !important;
+}
+
+/* ---------- Buttons ------------------------------------------------------- */
+html[data-phosphor="synthwave"] button,
+html[data-phosphor="synthwave"] [role="button"] {
+  background: rgba(13, 11, 30, 0.55) !important;
+  border-color: var(--sw-cyan) !important;
+  color: var(--sw-cyan) !important;
+  text-shadow: 0 0 4px var(--sw-cyan) !important;
+  box-shadow:
+    0 0 6px var(--sw-cyan),
+    inset 0 0 8px rgba(5, 217, 232, 0.15) !important;
+}
+html[data-phosphor="synthwave"] button:hover,
+html[data-phosphor="synthwave"] [role="button"]:hover {
+  background: var(--sw-cyan) !important;
+  color: var(--sw-sky-top) !important;
+  text-shadow: none !important;
+  box-shadow: 0 0 18px var(--sw-cyan) !important;
+}
+
+/* ---------- Selection ----------------------------------------------------- */
+html[data-phosphor="synthwave"] ::selection {
+  background: var(--sw-pink) !important;
+  color: var(--sw-sky-top) !important;
+  text-shadow: none !important;
+}
+
+/* ---------- Status bar: chrome-gradient feel ------------------------------ */
+html[data-phosphor="synthwave"] .dos-status-bar {
+  background: linear-gradient(to right, var(--sw-pink) 0%, var(--sw-magenta) 50%, var(--sw-cyan) 100%) !important;
+  color: var(--sw-sky-top) !important;
+  text-shadow: none !important;
+  border-top-color: var(--sw-pink) !important;
+}

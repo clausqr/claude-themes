@@ -1,97 +1,126 @@
-# Claude MS-DOS 3.3
+# Claude Themes
 
-A browser extension that reskins [claude.ai](https://claude.ai) with a 1987-era
-MS-DOS 3.3 phosphor aesthetic. Four variants, runtime-switchable from the
-extension popup:
+> A growing catalog of themes for [claude.ai](https://claude.ai). Assign a
+> palette to each project — tab-glance your way between them.
 
-- **Amber** — IBM 5151 monochrome (1981)
-- **Green** — Hercules / generic P1 phosphor
-- **White** — MDA / paper-white
-- **CGA** — black / white / cyan / magenta (palette 1, high-intensity)
+![strip](docs/assets/strip.png)
+<sub>screenshot strip, six launch themes. See the full **[Theme Gallery →](docs/GALLERY.md)**</sub>
 
-## Install (unpacked)
+## Why?
 
-**Chrome / Chromium / Edge / Brave:**
-1. `chrome://extensions`
-2. Toggle **Developer mode** on (top right).
-3. **Load unpacked** → select the `extension/` directory.
-4. Open `claude.ai`. Click the extension icon to pick a phosphor.
+You run three Claude projects. They all look identical. You tab-hop into
+the wrong one, scroll for 5 seconds, tab-hop back. Repeat all day.
+
+Bind **Project A → Amber**, **Project B → CGA**, **Project C → Synthwave**.
+Your peripheral vision does the context switching for you.
+
+## The launch catalog (v0.2)
+
+Six themes ship today; more in [GALLERY.md](docs/GALLERY.md).
+
+| Theme         | Feel                                                   |
+|---------------|--------------------------------------------------------|
+| **Amber**     | IBM 5151 monochrome (1981). Warm, low-fatigue.         |
+| **Green**     | Hercules P1 phosphor. Code-review classic.             |
+| **White**     | MDA paper-white. High-contrast daylight.               |
+| **CGA-4**     | Black / white / cyan / magenta. 1981 IBM PC defaults.  |
+| **CRT**       | Green phosphor + scanlines + glow + BIOS boot flash.   |
+| **Synthwave** | Neon grid + sunset sky + chrome. Outrun energy.        |
+
+All themes share the same BBS chrome: bundled **VT323** bitmap font,
+ANSI-box message frames (`──[ USER ]──` / `──[ CLAUDE ]──`), `>` bullets,
+blinking █ block cursor, fixed `C:\CLAUDE>` status bar.
+
+**➡️ Browse the full [Theme Gallery](docs/GALLERY.md)** — screenshots,
+palettes (with hex), and the inspiration for each one.
+
+## Install
+
+**Chrome / Edge / Brave:**
+1. Clone or download this repo.
+2. `chrome://extensions` → toggle **Developer mode**.
+3. **Load unpacked** → select `extension/`.
+4. Open `claude.ai`, click the toolbar icon, pick a theme.
 
 **Firefox (temporary):**
 1. `about:debugging#/runtime/this-firefox`
 2. **Load Temporary Add-on…** → pick `extension/manifest.json`.
-3. Same workflow — popup switches variants live.
 
-## Bitmap font (optional)
+No configuration. No external downloads. Fonts are bundled — you install
+the extension and everything works.
 
-The theme expects a bitmap DOS font at `extension/fonts/PerfectDOSVGA437.ttf`.
-It is **not bundled here** (licensing confirmation pending — see below). The
-theme still looks DOS-y with the fallback stack (`IBM Plex Mono`,
-`ui-monospace`, `Consolas`, `Courier New`, `monospace`), but drop a bitmap
-TTF in that folder for the full pixelated effect.
+Chrome Web Store + Firefox Add-ons listings coming — see
+[docs/RELEASE.md](docs/RELEASE.md).
 
-Licensing-clean candidates:
-- **MxPlus IBM VGA 9x16** from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/) — CC BY-SA 4.0, safe to redistribute inside an extension bundle if you include the license.
-- **Perfect DOS VGA 437** — freeware, author's site is sporadic; licensing for bundled redistribution is ambiguous.
+## Add your own theme
 
-If you use MxPlus, rename the TTF to `PerfectDOSVGA437.ttf` or update the
-`@font-face` `src` in `extension/content.css` and `extension/popup/popup.css`
-to match.
+A theme is ~15 lines of CSS scoped under `html[data-phosphor="<name>"]`.
+Copy `extension/variants/amber.css`, swap hex values, register it in four
+places, open a PR.
+
+Step-by-step in [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md).
+
+We welcome themes for real 1980s machines (Apple II, C64, Atari ST,
+NeXT), classic DE palettes (Solarized, Nord, Dracula, Tokyo Night,
+Gruvbox, Catppuccin), and anything else with a clear inspiration — cite
+the source in the PR description.
 
 ## Offline preview
 
-`preview/amber.html`, `preview/green.html`, `preview/white.html`,
-`preview/cga.html` render the theme against a synthetic fixture that mirrors
-claude.ai's DOM. Open them directly in a browser (no install needed) to
-iterate on the CSS without reloading the extension.
+`preview/{amber,green,white,cga,crt,synthwave}.html` render each theme
+against a synthetic claude.ai-shaped DOM. Open directly in a browser;
+no extension reload needed.
 
-The actual saved HTML snapshots live in `ref/`. They're captured with
-embedded darkreader injections and the stock 168KB minified bundle, so we
-don't wire our theme against them directly — the synthetic preview pages
-are more reliable. `ref/` is kept frozen as a reference of the selector
-vocabulary we target.
+## How it works
 
-## How switching works
+- `extension/content.css` defines the shared base: CSS custom-property
+  overrides (radii, surfaces, fonts, text roles), Tailwind utility-class
+  kills (`[class*="rounded"]`, `[class*="shadow"]`, `[class*="blur"]`,
+  `[class*="bg-gradient"]`), ANSI-box message decorations, block cursor.
+- `extension/variants/*.css` each scope a palette under their own
+  `html[data-phosphor="X"]` attribute. All variants ship together; only
+  the active one wins the cascade.
+- `extension/content.js` reads the chosen theme from `chrome.storage.sync`
+  at `document_start`, sets `data-phosphor` on `<html>`, listens for
+  `storage.onChanged` so switches are instant with no reload.
+- `extension/fonts/VT323-Regular.ttf` — OFL 1.1 bitmap font, bundled.
 
-- Popup writes `{ phosphor: "amber" | "green" | "white" | "cga" }` to
-  `chrome.storage.sync`.
-- `content.js` runs at `document_start` on `claude.ai/*`, reads storage,
-  sets `document.documentElement.dataset.phosphor = variant`, and listens
-  for `storage.onChanged` to swap live with no reload.
-- `content.css` defines the base theme; `variants/*.css` each scope their
-  palette under `html[data-phosphor="<variant>"]`, so all four are loaded
-  but only the matching one "wins."
+Zero telemetry, zero network calls, zero permissions beyond `storage` and
+`https://claude.ai/*`.
 
-This avoids needing `chrome.scripting.executeScript` messaging and works on
-Firefox MV3 without a polyfill.
+## Roadmap
 
-## Selector / variable reference
+- [ ] **Per-project variant binding** — map `claude.ai/project/<id>` to
+      themes so each project auto-loads its own palette. The headline
+      feature. Pre-launch blocker.
+- [ ] Chrome Web Store + Firefox AMO listings (see [RELEASE.md](docs/RELEASE.md)).
+- [ ] Community themes: Solarized, Dracula, Nord, Apple II, C64,
+      Atari ST, NeXT. Contributions welcome.
+- [ ] Optional scanline toggle for non-CRT themes.
+- [ ] Font picker (swap the base bitmap face).
 
-Core overrides land in `extension/content.css`. It targets three layers:
+## Contributing
 
-1. **CSS custom properties** — `--r0..--r8` (radii → 0), `--z0..--z6`
-   (surfaces), `--t0..--t9` (overlays), `--font-ui/--font-mono/…`, `--accent`,
-   `--text-*`, `--bg-*`, `--border-*`.
-2. **Tailwind utility classes** — `[class*="rounded"]`, `[class*="shadow"]`,
-   `[class*="blur"]`, `[class*="bg-gradient"]`, `[class*="ring-"]` get
-   blanket `!important` kills.
-3. **Targeted DOM decorations** — ASCII double borders on `#turn-form` and
-   the sidebar, bracketed `[CLAUDE]` / `[USER]` prefixes on message regions,
-   a fake status bar fixed at the bottom of the viewport.
+- **Bug in a theme?** Open an issue with a screenshot and the theme name.
+- **New theme?** See [CONTRIBUTING.md](docs/CONTRIBUTING.md).
+- **New feature?** Open an issue first to discuss scope.
 
-## Drift
+CSS-only changes are the easy path — edit the relevant `variants/*.css`
+or `content.css`, refresh the preview page, screenshot the before/after,
+open a PR.
 
-`claude.ai` ships a new minified bundle whenever they push. The utility-class
-kills (`[class*="rounded"]`, etc.) survive renames; the per-component
-selectors (`.flex-shrink-0.bg-bg-200.border-r-[0.5px]`, etc.) do not. Expect
-to chase selectors occasionally. The `ref/` snapshots are frozen for
-comparison — diff against a fresh save to find what moved.
+## License
 
-No version-pinning check is in place; if a release breaks the theme badly,
-the user just uninstalls.
+- **Extension code** (HTML, CSS, JS): MIT.
+- **VT323 font** (bundled): SIL Open Font License 1.1. See
+  [extension/fonts/OFL.txt](extension/fonts/OFL.txt).
+- **Contributed themes**: accepted under MIT unless the author specifies
+  a compatible license and credits their palette source.
 
-## Development
+## Credits
 
-No build step. Edit CSS/JS in `extension/` and reload the extension
-(`chrome://extensions` → reload button). For the offline previews, just
-refresh the browser tab.
+- **VT323** — Peter Hull, OFL 1.1.
+- **Oldschool PC Font Pack** — VileR, [int10h.org](https://int10h.org/oldschool-pc-fonts/).
+  We don't bundle MxPlus directly (licensing audit pending), but VT323 is
+  inspired by the same VGA bitmap heritage.
+- BBS ANSI-art conventions from a thousand 1990s sysops.
