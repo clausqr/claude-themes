@@ -9,7 +9,7 @@
   "use strict";
 
   const DEFAULT_VARIANT = "amber";
-  const VALID = new Set(["amber", "green", "white", "cga"]);
+  const VALID = new Set(["amber", "green", "white", "cga", "crt", "synthwave"]);
 
   function applyVariant(variant) {
     const v = VALID.has(variant) ? variant : DEFAULT_VARIANT;

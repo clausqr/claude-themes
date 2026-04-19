@@ -1,0 +1,154 @@
+/* ============================================================================
+   CRT — 5th variant.
+   Built on green P1 phosphor. Adds full-fat CRT effects:
+     - scanline overlay (fixed, 2px repeating)
+     - text-shadow phosphor glow
+     - brightness flicker animation
+     - boot-screen flash on first paint
+   Everything is scoped under html[data-phosphor="crt"] so it does not bleed
+   into the flat MS-DOS variants.
+   ============================================================================ */
+
+html[data-phosphor="crt"] {
+  --phosphor-bg: #001a00;
+  --phosphor-bg-raised: #002800;
+  --phosphor-bg-inset: #000d00;
+  --phosphor-fg: #39ff55;
+  --phosphor-fg-dim: #1ccc33;
+  --phosphor-fg-bright: #b0ffc0;
+  --phosphor-accent: #39ff55;
+  --phosphor-destructive: #ff5555;
+  --phosphor-border: #1ccc33;
+}
+
+/* ---------- Scanlines overlay --------------------------------------------- */
+/* Fixed full-viewport overlay drawn with a repeating linear-gradient. Fades
+   rows alternate at ~35% opacity step. Pointer-events none so it doesn't
+   block interaction. */
+html[data-phosphor="crt"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2147483646;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 1px,
+    rgba(0, 0, 0, 0.35) 1px,
+    rgba(0, 0, 0, 0.35) 2px
+  );
+  mix-blend-mode: multiply;
+}
+
+/* ---------- Phosphor glow on text ----------------------------------------- */
+/* Deviates from the MS-DOS "no shadows" rule, intentionally — CRTs glow. */
+html[data-phosphor="crt"] body,
+html[data-phosphor="crt"] p,
+html[data-phosphor="crt"] span,
+html[data-phosphor="crt"] div,
+html[data-phosphor="crt"] a,
+html[data-phosphor="crt"] h1,
+html[data-phosphor="crt"] h2,
+html[data-phosphor="crt"] h3,
+html[data-phosphor="crt"] h4,
+html[data-phosphor="crt"] h5,
+html[data-phosphor="crt"] h6,
+html[data-phosphor="crt"] li,
+html[data-phosphor="crt"] td,
+html[data-phosphor="crt"] th,
+html[data-phosphor="crt"] code,
+html[data-phosphor="crt"] pre,
+html[data-phosphor="crt"] button,
+html[data-phosphor="crt"] input,
+html[data-phosphor="crt"] textarea {
+  text-shadow:
+    0 0 1px var(--phosphor-fg),
+    0 0 4px rgba(57, 255, 85, 0.6),
+    0 0 10px rgba(57, 255, 85, 0.35) !important;
+}
+
+/* Borders get a subtle outer glow too */
+html[data-phosphor="crt"] #turn-form,
+html[data-phosphor="crt"] .relative.bg-bg-000,
+html[data-phosphor="crt"] [role="dialog"],
+html[data-phosphor="crt"] [role="region"],
+html[data-phosphor="crt"] aside {
+  box-shadow:
+    0 0 4px rgba(57, 255, 85, 0.3),
+    inset 0 0 12px rgba(57, 255, 85, 0.08) !important;
+}
+
+/* ---------- Flicker ------------------------------------------------------- */
+/* Subtle brightness oscillation — not seizure-inducing, ~3% swing. */
+html[data-phosphor="crt"] body {
+  animation: crt-flicker 140ms steps(2) infinite;
+}
+@keyframes crt-flicker {
+  0%   { filter: brightness(1.00); }
+  50%  { filter: brightness(0.97); }
+  100% { filter: brightness(1.00); }
+}
+
+/* Occasional larger roll every ~8s */
+html[data-phosphor="crt"] html {
+  animation: crt-roll 8s linear infinite;
+}
+@keyframes crt-roll {
+  0%, 97%  { filter: none; }
+  98%      { filter: brightness(1.15); }
+  99%      { filter: brightness(0.85); }
+  100%     { filter: none; }
+}
+
+/* ---------- Boot screen --------------------------------------------------- */
+/* One-shot overlay shown on page load: classic POST sequence text, then
+   fades out. We use an element generated from CSS via body::after so no
+   JS is needed. */
+html[data-phosphor="crt"] body::after {
+  content:
+    "AMI BIOS (C)1987 American Megatrends Inc.\A"
+    "Main Processor : 80386DX @ 16 MHz\A"
+    "Math Coprocessor : Present\A"
+    "Base Memory : 640 KB OK\A"
+    "Extended Memory : 384 KB OK\A"
+    "Testing parallel ports.......... OK\A"
+    "Testing serial ports............ OK\A"
+    "Detecting IDE drives............ DONE\A"
+    "\A"
+    "Starting MS-DOS 3.3...\A"
+    "\A"
+    "CLAUDE.SYS loaded\A"
+    "CONFIG.SYS processed\A"
+    "AUTOEXEC.BAT complete\A"
+    "\A"
+    "C:\\CLAUDE>_";
+  white-space: pre;
+  position: fixed;
+  inset: 0;
+  padding: 40px;
+  background: #000;
+  color: var(--phosphor-fg);
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.35;
+  z-index: 2147483647;
+  pointer-events: none;
+  animation: crt-boot 2.4s steps(1, end) forwards;
+  text-shadow:
+    0 0 1px var(--phosphor-fg),
+    0 0 6px rgba(57, 255, 85, 0.7);
+}
+@keyframes crt-boot {
+  0%   { opacity: 1; }
+  80%  { opacity: 1; }
+  95%  { opacity: 0.3; }
+  100% { opacity: 0; visibility: hidden; }
+}
+
+/* Make sure the status bar on CRT has the green palette too */
+html[data-phosphor="crt"] .dos-status-bar {
+  background: var(--phosphor-fg) !important;
+  color: #001a00 !important;
+  text-shadow: none !important;
+}

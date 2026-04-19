@@ -5,15 +5,21 @@
    html[data-phosphor="<variant>"].
    ============================================================================= */
 
-/* ---------- Bitmap font ----------------------------------------------------
-   Ship a bitmap DOS font inside the extension. Expected file:
-     fonts/PerfectDOSVGA437.ttf
-   If absent, the stack falls back to common monospace faces. The theme is
-   still legible without the bitmap TTF, it just loses the pixelated feel.
+/* ---------- Bitmap font (bundled) -----------------------------------------
+   VT323 ships inside the extension — no user setup. OFL 1.1 licensed
+   (see fonts/OFL.txt). Primary bitmap face for every variant. Fallback
+   stack below covers the case where the font file fails to load.
    --------------------------------------------------------------------------- */
 @font-face {
+  font-family: "VT323";
+  src: url("fonts/VT323-Regular.ttf") format("truetype");
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
   font-family: "DOS VGA";
-  src: url("fonts/PerfectDOSVGA437.ttf") format("truetype");
+  src: url("fonts/VT323-Regular.ttf") format("truetype");
   font-display: swap;
   font-weight: normal;
   font-style: normal;
@@ -39,16 +45,31 @@ html[data-theme="claude"] {
   --radius-full: 0 !important;
 
   /* ---- Font families: everything becomes the DOS bitmap stack ----------- */
-  --font-ui: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
-    ui-monospace, Consolas, "Courier New", monospace !important;
-  --font-mono: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
-    ui-monospace, Consolas, "Courier New", monospace !important;
-  --font-ui-serif: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
-    ui-monospace, Consolas, "Courier New", monospace !important;
-  --font-claude-response: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
-    ui-monospace, Consolas, "Courier New", monospace !important;
-  --font-user-message: "DOS VGA", "IBM Plex Mono", "Perfect DOS VGA 437",
-    ui-monospace, Consolas, "Courier New", monospace !important;
+  --font-ui: "VT323", "DOS VGA", "Perfect DOS VGA 437",
+    "MxPlus IBM VGA 9x16", "MxPlus IBM VGA 8x16",
+    "Fixedsys Excelsior 3.01", "Fixedsys", "Terminal",
+    "IBM Plex Mono", "Cascadia Mono", ui-monospace, Consolas,
+    "Courier New", monospace !important;
+  --font-mono: "VT323", "DOS VGA", "Perfect DOS VGA 437",
+    "MxPlus IBM VGA 9x16", "MxPlus IBM VGA 8x16",
+    "Fixedsys Excelsior 3.01", "Fixedsys", "Terminal",
+    "IBM Plex Mono", "Cascadia Mono", ui-monospace, Consolas,
+    "Courier New", monospace !important;
+  --font-ui-serif: "VT323", "DOS VGA", "Perfect DOS VGA 437",
+    "MxPlus IBM VGA 9x16", "MxPlus IBM VGA 8x16",
+    "Fixedsys Excelsior 3.01", "Fixedsys", "Terminal",
+    "IBM Plex Mono", "Cascadia Mono", ui-monospace, Consolas,
+    "Courier New", monospace !important;
+  --font-claude-response: "VT323", "DOS VGA", "Perfect DOS VGA 437",
+    "MxPlus IBM VGA 9x16", "MxPlus IBM VGA 8x16",
+    "Fixedsys Excelsior 3.01", "Fixedsys", "Terminal",
+    "IBM Plex Mono", "Cascadia Mono", ui-monospace, Consolas,
+    "Courier New", monospace !important;
+  --font-user-message: "VT323", "DOS VGA", "Perfect DOS VGA 437",
+    "MxPlus IBM VGA 9x16", "MxPlus IBM VGA 8x16",
+    "Fixedsys Excelsior 3.01", "Fixedsys", "Terminal",
+    "IBM Plex Mono", "Cascadia Mono", ui-monospace, Consolas,
+    "Courier New", monospace !important;
 
   /* Default palette = amber (IBM 5151). Variant files override these. */
   --phosphor-bg: #0a0500;
@@ -132,6 +153,18 @@ html, body {
   -moz-osx-font-smoothing: unset !important;
   font-smooth: never !important;
   text-rendering: optimizeSpeed !important;
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
+  font-variant-ligatures: none !important;
+  font-feature-settings: normal !important;
+  font-kerning: none !important;
+}
+
+/* Everything rides on the same bitmap baseline */
+p, li, span, div, a, code, pre, h1, h2, h3, h4, h5, h6,
+input, textarea, select, button, label, td, th {
+  line-height: 1.25 !important;
+  letter-spacing: 0 !important;
 }
 
 *,
@@ -139,10 +172,11 @@ html, body {
 *::after {
   border-radius: 0 !important;
   box-shadow: none !important;
-  text-shadow: none !important;
-  filter: none !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
+  /* NOTE: text-shadow and filter are NOT killed here — CRT + synthwave
+     variants use them for phosphor glow / flicker. Utility-class kills
+     below handle Tailwind-specific cases. */
 }
 
 /* Rounded utility families */
@@ -263,34 +297,46 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline-offset: 0 !important;
 }
 
-/* ---------- ProseMirror composer ------------------------------------------ */
+/* ---------- ProseMirror composer + block cursor --------------------------- */
 .ProseMirror {
   background: var(--phosphor-bg-inset) !important;
   color: var(--phosphor-fg) !important;
-  caret-color: transparent !important; /* real caret hidden; we draw a block */
+  caret-color: var(--phosphor-fg) !important;
   font-family: var(--font-ui) !important;
+  line-height: 1.25 !important;
 }
-.ProseMirror *::selection {
+.ProseMirror *::selection,
+.ProseMirror::selection {
   background: var(--phosphor-fg) !important;
   color: var(--phosphor-bg) !important;
 }
 
-/* Block caret: overlay a blinking square at the end of focused ProseMirror.
-   We abuse ::after on the focused element; position relative on the parent
-   wrapper isn't guaranteed, so use inline-block trickery with an empty span.
-   Claude's ProseMirror doesn't expose a caret span, so we settle for a
-   field-wide blinking cue via the input wrapper. */
+/* Block cursor: append a solid unicode block glyph that blinks. Appears at
+   the end of the composer area when focused — not perfectly positioned at
+   the actual insertion point (ProseMirror doesn't expose that cheaply), but
+   reads as "waiting for input" which is the BBS cue we want. */
 #turn-form:focus-within::after,
-.relative.bg-bg-000:focus-within::after {
-  content: "_";
+.relative.bg-bg-000:focus-within::after,
+.ProseMirror:focus::after {
+  content: "\2588";             /* █ FULL BLOCK */
   color: var(--phosphor-fg);
-  animation: dos-caret-blink 1s steps(2, start) infinite;
-  position: absolute;
-  pointer-events: none;
+  animation: dos-caret-blink 1.06s steps(2, start) infinite;
   font-family: var(--font-ui);
+  display: inline-block;
+  vertical-align: baseline;
+  line-height: 1;
+  margin-left: 1px;
+  pointer-events: none;
 }
 @keyframes dos-caret-blink {
-  to { visibility: hidden; }
+  0%, 49.9%  { opacity: 1; }
+  50%, 100%  { opacity: 0; }
+}
+
+/* Also give every text input a block cursor via CSS caret-color + extra width
+   trick: override the native thin caret with a phosphor-colored one. */
+input, textarea {
+  caret-shape: block;           /* Safari 16+, Firefox (behind flag) */
 }
 
 /* ---------- Input box border (ASCII double-line) -------------------------- */
@@ -326,8 +372,8 @@ pre, code, pre code, .hljs, [class*="code-block"] {
   background: transparent !important;
 }
 
-/* ---------- Messages: bracketed [USER] / [CLAUDE] tags -------------------- */
-/* Hide the avatar graphics — DOS had no avatars */
+/* ---------- Messages: ANSI-box-drawn BBS bubbles -------------------------- */
+/* Hide the avatar graphics — DOS/BBS had no avatars */
 [data-testid="user-avatar"],
 [data-testid="assistant-avatar"],
 img[alt*="avatar" i],
@@ -337,39 +383,113 @@ img[alt*="avatar" i],
   display: none !important;
 }
 
-/* Assistant messages: region with assistant prose */
+/* Assistant + user bubble base: give them proper BBS box frames.
+   We pad the container, draw a top legend via ::before and a bottom rule
+   via ::after. Left side is handled by a real CSS border (cheap + tall). */
+[role="region"],
+[data-testid*="user"],
+.font-claude-response,
+.font-user-message,
+.bg-bg-300.rounded-2xl,
+[class*="message"][class*="user"],
+[class*="message"][class*="assistant"] {
+  position: relative !important;
+  border: 1px solid var(--phosphor-border) !important;
+  border-left-width: 2px !important;
+  padding: 14px 10px 10px 12px !important;
+  margin: 18px 0 !important;
+  background: var(--phosphor-bg) !important;
+}
+
+/* Top legend: ┌─[ WHO ]──────────────────────────── */
+[role="region"]::before,
+[data-testid*="user"]::before,
+.bg-bg-300.rounded-2xl::before,
+[class*="message"][class*="user"]::before,
+[class*="message"][class*="assistant"]::before {
+  content: "──[ MESSAGE ]──────────────────────────────";
+  position: absolute;
+  top: -0.7em;
+  left: 8px;
+  padding: 0 6px;
+  background: var(--phosphor-bg);
+  color: var(--phosphor-fg-dim);
+  font-family: var(--font-ui) !important;
+  font-size: 12px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* Specialized legends per role */
+[role="region"]:not([aria-label*="user" i])::before,
+[class*="message"][class*="assistant"]::before,
+.font-claude-response::before {
+  content: "──[ CLAUDE ]───────────────────────────────";
+}
+[data-testid*="user"]::before,
+[class*="message"][class*="user"]::before,
+.bg-bg-300.rounded-2xl::before,
+.font-user-message::before {
+  content: "──[ USER ]─────────────────────────────────";
+}
+
+/* Bottom edge: faint ASCII rule */
+[role="region"]::after,
+[data-testid*="user"]::after,
+.bg-bg-300.rounded-2xl::after,
+[class*="message"][class*="user"]::after,
+[class*="message"][class*="assistant"]::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -1px;
+  height: 0;
+  border-bottom: 1px dashed var(--phosphor-border);
+}
+
+/* Assistant prose color */
 [role="region"] [class*="prose"],
 [data-is-streaming],
 .font-claude-response {
   color: var(--phosphor-fg) !important;
 }
 
-/* Prefix assistant regions with [CLAUDE] */
-[role="region"]:not([aria-label*="user" i])::before {
-  content: "[CLAUDE] ";
+/* BBS-style bullets: > for UL, numeric + right-pad for OL */
+ul, ol {
+  padding-left: 1.5em !important;
+}
+ul > li {
+  list-style: none !important;
+  position: relative;
+}
+ul > li::before {
+  content: ">";
+  position: absolute;
+  left: -1.2em;
   color: var(--phosphor-fg-dim);
   font-family: var(--font-ui);
-  display: block;
-  margin-bottom: 4px;
-  letter-spacing: 1px;
 }
-
-/* User message bubble: render as [USER] prefix */
-[data-testid*="user"] ::before,
-.font-user-message::before {
-  content: "[USER] ";
-  color: var(--phosphor-fg-dim);
-  letter-spacing: 1px;
+ol {
+  list-style: none !important;
+  counter-reset: bbs;
 }
-
-/* Generic fallback for message-ish containers */
-.bg-bg-300.rounded-2xl::before,
-[class*="message"][class*="user"]::before {
-  content: "[USER] ";
+ol > li {
+  counter-increment: bbs;
+  position: relative;
+}
+ol > li::before {
+  content: "[" counter(bbs, decimal) "]";
+  position: absolute;
+  left: -2em;
   color: var(--phosphor-fg-dim);
-  display: block;
   font-family: var(--font-ui);
-  margin-bottom: 2px;
+}
+
+/* Blockquotes: "| " prefix per line (BBS quote style) */
+blockquote {
+  border-left: 2px solid var(--phosphor-border) !important;
+  padding-left: 0.8em !important;
+  margin-left: 0 !important;
+  color: var(--phosphor-fg-dim) !important;
 }
 
 /* ---------- SVG icons: flatten to currentColor ---------------------------- */

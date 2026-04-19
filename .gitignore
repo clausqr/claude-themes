@@ -1,0 +1,19 @@
+# Private notes — internal planning, launch strategy, competitive analysis.
+# Kept in-tree for convenience but never committed.
+notes/
+
+# OS / editor droppings
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node / build artifacts (no build today, but reserve for later)
+node_modules/
+dist/
+*.log
+
+# Packaged store uploads
+claude-themes-chrome-*.zip
+claude-themes-firefox-*.zip
