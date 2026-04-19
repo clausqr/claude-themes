@@ -90,21 +90,20 @@ Zero telemetry, zero network calls, zero permissions beyond `storage` and
 
 ## Per-tab binding
 
-Open any claude.ai tab whose URL matches a bindable section:
+Open any non-root claude.ai tab. Click the extension icon. Tick
+**"Use for this tab"** — the popup writes your theme choice only for
+that URL's pathname. Other tabs keep whatever they were on; unbound
+tabs use the default.
 
-- `/chat/<conv-id>` — individual conversations
-- `/code/<session-id>` — Claude Code sessions
-- `/project/<id>` or `/projects/<id>` — Projects
-
-Click the extension icon. Tick **"Use for this tab"** — the popup now
-writes your theme choice only for that scope key (`section/id`). Other
-tabs keep whatever they were on; unbound tabs use the default.
+Scope key = `location.pathname` (e.g. `/code/session_01ABC`,
+`/chat/abc`, `/project/foo`). Every distinct URL is its own stable
+binding; new claude.ai sections work automatically with no extension
+update.
 
 Internally: `chrome.storage.sync` holds `{ default, perProject }` where
-each key is `"<section>/<id>"` (e.g. `"code/session_01ABC"`).
-`content.js` polls `location.pathname` every 500ms (claude.ai navigates
-via `pushState` without reloading) and reapplies the right theme when
-you move between tabs.
+each key is a pathname. `content.js` polls `location.pathname` every
+500ms (claude.ai navigates via `pushState` without reloading) and
+reapplies the right theme when you move between tabs.
 
 ## Roadmap
 
