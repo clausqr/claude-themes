@@ -29,8 +29,8 @@
     try {
       const u = new URL(urlStr);
       if (!/^(?:.*\.)?claude\.ai$/i.test(u.hostname)) return null;
-      const m = u.pathname.match(/^\/(chat|code|project|projects)\/([^/?#]+)/);
-      return m ? m[1] + "/" + m[2] : null;
+      const stripped = u.pathname.replace(/\/+$/, "");
+      return stripped && stripped !== "" ? stripped : null;
     } catch (e) {
       return null;
     }
@@ -61,7 +61,7 @@
       scopeToggle.checked = false;
       scopeToggle.disabled = true;
       scopeLabel.textContent = "DEFAULT (ALL TABS)";
-      scopeHint.textContent = "Open a /chat, /code, or /project tab to bind.";
+      scopeHint.textContent = "Open any claude.ai page to bind.";
       menuTitle.textContent = "DEFAULT THEME:";
       return;
     }

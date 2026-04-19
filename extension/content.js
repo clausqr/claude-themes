@@ -4,13 +4,10 @@
  * listens for storage changes, and polls for SPA navigation since
  * claude.ai transitions via pushState without a full reload.
  *
- * Bindable URL sections:
- *   /chat/<conv-id>         individual conversations
- *   /code/<session-id>      Claude Code sessions
- *   /project(s)/<id>        Projects feature
- *
- * Scope key shape: "<section>/<id>" (e.g. "code/session_01ABC"). Ensures
- * two different sections can never collide in storage.
+ * Bindable scope: any non-root claude.ai pathname (e.g. "/code/abc",
+ * "/chat/xyz", "/project/foo"). Scope key = the full pathname so every
+ * distinct URL is stable, and new claude.ai sections don't need a code
+ * change to become bindable.
  *
  * Storage (v0.3+):
  *   { default: "amber", perProject: { "<scope-key>": "cga", ... } }
@@ -30,11 +27,14 @@
   let lastAppliedVariant = null;
   let lastPath = "";
 
+  // Any non-root claude.ai pathname is a bindable scope. We key by the full
+  // pathname so every distinct URL (/chat/abc, /code/xyz, /project/foo, or
+  // any future section) gets its own binding with no regex gatekeeping.
+  // Normalize: strip trailing "/" so "/chat/abc" and "/chat/abc/" match.
   function scopeKeyFromPath(pathname) {
-    const m = (pathname || "").match(
-      /^\/(chat|code|project|projects)\/([^/?#]+)/
-    );
-    return m ? m[1] + "/" + m[2] : null;
+    if (!pathname) return null;
+    const stripped = pathname.replace(/\/+$/, "");
+    return stripped && stripped !== "" ? stripped : null;
   }
 
   function resolveVariant() {
