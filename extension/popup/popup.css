@@ -1,0 +1,163 @@
+/* Popup — dogfooded DOS aesthetic. Uses its own palette variables so it
+   previews regardless of which variant is active on the page. */
+
+@font-face {
+  font-family: "DOS VGA";
+  src: url("../fonts/PerfectDOSVGA437.ttf") format("truetype");
+  font-display: swap;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: "DOS VGA", "IBM Plex Mono", ui-monospace, Consolas,
+    "Courier New", monospace;
+  font-size: 14px;
+  width: 240px;
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+}
+
+html[data-phosphor="amber"] {
+  --bg: #0a0500;
+  --bg-inset: #050200;
+  --fg: #ffb000;
+  --fg-dim: #c88500;
+  --fg-bright: #ffd070;
+  --border: #c88500;
+  --accent: #ffb000;
+}
+html[data-phosphor="green"] {
+  --bg: #001a00;
+  --bg-inset: #000d00;
+  --fg: #33ff33;
+  --fg-dim: #00cc00;
+  --fg-bright: #90ff90;
+  --border: #00cc00;
+  --accent: #33ff33;
+}
+html[data-phosphor="white"] {
+  --bg: #0a0a0a;
+  --bg-inset: #050505;
+  --fg: #e6e6e6;
+  --fg-dim: #a8a8a8;
+  --fg-bright: #ffffff;
+  --border: #a8a8a8;
+  --accent: #e6e6e6;
+}
+html[data-phosphor="cga"] {
+  --bg: #000000;
+  --bg-inset: #000000;
+  --fg: #ffffff;
+  --fg-dim: #aaaaaa;
+  --fg-bright: #ffffff;
+  --border: #55ffff;
+  --accent: #55ffff;
+}
+
+* {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  transition: none !important;
+}
+
+.titlebar {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: var(--fg);
+  color: var(--bg);
+  letter-spacing: 1px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 2px;
+  border: 2px double var(--border);
+  margin: 6px;
+}
+
+.menu h1 {
+  font-size: 14px;
+  margin: 0 0 8px 0;
+  font-weight: normal;
+  color: var(--fg-bright);
+  letter-spacing: 1px;
+}
+
+.item {
+  appearance: none;
+  background: var(--bg);
+  color: var(--fg);
+  border: none;
+  font: inherit;
+  text-align: left;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  align-items: baseline;
+}
+.item .bullet {
+  grid-row: 1 / span 2;
+  color: var(--fg-dim);
+}
+.item .label {
+  color: var(--fg-bright);
+  letter-spacing: 1px;
+}
+.item .sub {
+  color: var(--fg-dim);
+  font-size: 12px;
+  grid-column: 2;
+}
+
+.item:hover,
+.item:focus-visible {
+  background: var(--fg);
+  color: var(--bg);
+  outline: none;
+}
+.item:hover .label,
+.item:focus-visible .label,
+.item:hover .sub,
+.item:focus-visible .sub,
+.item:hover .bullet,
+.item:focus-visible .bullet {
+  color: var(--bg);
+}
+
+.item[aria-checked="true"] .bullet::before { content: ""; }
+.item[aria-checked="true"] .bullet { color: var(--fg-bright); }
+.item[aria-checked="true"] .bullet { }
+/* Fill the brackets for the active item */
+.item[aria-checked="true"] .bullet {
+  color: var(--fg-bright);
+}
+
+.statusbar {
+  padding: 4px 8px;
+  background: var(--fg);
+  color: var(--bg);
+  letter-spacing: 1px;
+}
+
+/* Active-item bullet rendering: replace "[ ]" with "[*]" */
+.item[aria-checked="true"] .bullet {
+  visibility: hidden;
+  position: relative;
+}
+.item[aria-checked="true"] .bullet::after {
+  content: "[*]";
+  visibility: visible;
+  position: absolute;
+  left: 0;
+  color: var(--fg-bright);
+}
