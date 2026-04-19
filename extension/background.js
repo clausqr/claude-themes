@@ -1,12 +1,24 @@
-/* Claude MS-DOS 3.3 — background service worker.
- * Minimal: seeds the default phosphor on install. The content script handles
- * applying / re-applying the variant on page load and storage changes, so
- * the service worker doesn't need to broadcast anything. */
+/* Claude Themes — background service worker.
+ * Seeds defaults on first install and normalizes legacy storage shape.
+ * Runtime work lives in content.js. */
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.get({ phosphor: null }, (res) => {
-    if (res.phosphor == null) {
-      chrome.storage.sync.set({ phosphor: "amber" });
+  chrome.storage.sync.get(
+    { default: null, perProject: null, phosphor: null },
+    (res) => {
+      const next = {};
+      if (res.default == null) {
+        next.default = res.phosphor || "amber";
+      }
+      if (res.perProject == null) {
+        next.perProject = {};
+      }
+      if (Object.keys(next).length > 0) {
+        chrome.storage.sync.set(next);
+      }
+      if (res.phosphor != null) {
+        chrome.storage.sync.remove("phosphor");
+      }
     }
-  });
+  );
 });
