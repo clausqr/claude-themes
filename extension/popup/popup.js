@@ -2,13 +2,13 @@
  *
  * Scope states:
  *   - "default"  writes go to chrome.storage.sync.default
- *                (applies to every claude.ai tab with no per-project bind)
- *   - "project"  we detected /project/<id> on the active tab AND the user
- *                toggled "Use for this project". Writes go to
- *                perProject[id].
+ *                (applies to every claude.ai tab with no per-tab bind)
+ *   - "tab"      we detected a bindable URL (/chat, /code, /project(s)) on
+ *                the active tab AND the user toggled "Use for this tab".
+ *                Writes go to perProject[<section>/<id>].
  *
- * Toggling scope off while a project is bound deletes its entry so the
- * project falls back to default. */
+ * Toggling scope off while bound deletes its entry so the tab falls back
+ * to default. */
 
 (function () {
   "use strict";
@@ -21,24 +21,24 @@
   const menuTitle = document.getElementById("menu-title");
 
   const storage = { default: FALLBACK, perProject: {} };
-  let projectId = null;
-  let scopeProjectBound = false;
+  let scopeKey = null;        // e.g. "code/session_01ABC"; null if not bindable
+  let scopeBound = false;
 
-  function projectIdFromUrl(urlStr) {
+  function scopeKeyFromUrl(urlStr) {
     if (!urlStr) return null;
     try {
       const u = new URL(urlStr);
       if (!/^(?:.*\.)?claude\.ai$/i.test(u.hostname)) return null;
-      const m = u.pathname.match(/^\/projects?\/([^/?#]+)/);
-      return m ? m[1] : null;
+      const m = u.pathname.match(/^\/(chat|code|project|projects)\/([^/?#]+)/);
+      return m ? m[1] + "/" + m[2] : null;
     } catch (e) {
       return null;
     }
   }
 
   function currentScopeVariant() {
-    if (projectId && scopeProjectBound && storage.perProject[projectId]) {
-      return storage.perProject[projectId];
+    if (scopeKey && scopeBound && storage.perProject[scopeKey]) {
+      return storage.perProject[scopeKey];
     }
     return storage.default || FALLBACK;
   }
@@ -57,19 +57,19 @@
   }
 
   function renderScope() {
-    if (!projectId) {
+    if (!scopeKey) {
       scopeToggle.checked = false;
       scopeToggle.disabled = true;
       scopeLabel.textContent = "DEFAULT (ALL TABS)";
-      scopeHint.textContent = "Open a /project/<id> tab to bind a theme.";
+      scopeHint.textContent = "Open a /chat, /code, or /project tab to bind.";
       menuTitle.textContent = "DEFAULT THEME:";
       return;
     }
     scopeToggle.disabled = false;
-    scopeToggle.checked = scopeProjectBound;
-    scopeLabel.textContent = scopeProjectBound ? "THIS PROJECT" : "DEFAULT (ALL TABS)";
-    menuTitle.textContent = scopeProjectBound ? "THEME FOR THIS PROJECT:" : "DEFAULT THEME:";
-    scopeHint.textContent = "project: " + projectId;
+    scopeToggle.checked = scopeBound;
+    scopeLabel.textContent = scopeBound ? "THIS TAB" : "DEFAULT (ALL TABS)";
+    menuTitle.textContent = scopeBound ? "THEME FOR THIS TAB:" : "DEFAULT THEME:";
+    scopeHint.textContent = scopeKey;
   }
 
   function render() {
@@ -78,8 +78,8 @@
   }
 
   function choose(variant) {
-    if (projectId && scopeProjectBound) {
-      const nextMap = Object.assign({}, storage.perProject, { [projectId]: variant });
+    if (scopeKey && scopeBound) {
+      const nextMap = Object.assign({}, storage.perProject, { [scopeKey]: variant });
       storage.perProject = nextMap;
       chrome.storage.sync.set({ perProject: nextMap }, render);
     } else {
@@ -89,20 +89,20 @@
   }
 
   function onScopeToggle() {
-    if (!projectId) return;
+    if (!scopeKey) return;
     if (scopeToggle.checked) {
-      scopeProjectBound = true;
-      if (!storage.perProject[projectId]) {
+      scopeBound = true;
+      if (!storage.perProject[scopeKey]) {
         const seed = storage.default || FALLBACK;
-        const nextMap = Object.assign({}, storage.perProject, { [projectId]: seed });
+        const nextMap = Object.assign({}, storage.perProject, { [scopeKey]: seed });
         storage.perProject = nextMap;
         chrome.storage.sync.set({ perProject: nextMap }, render);
         return;
       }
     } else {
-      scopeProjectBound = false;
+      scopeBound = false;
       const nextMap = Object.assign({}, storage.perProject);
-      delete nextMap[projectId];
+      delete nextMap[scopeKey];
       storage.perProject = nextMap;
       chrome.storage.sync.set({ perProject: nextMap }, render);
       return;
@@ -134,12 +134,12 @@
     ),
     new Promise((resolve) =>
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        projectId = projectIdFromUrl(tabs && tabs[0] && tabs[0].url);
+        scopeKey = scopeKeyFromUrl(tabs && tabs[0] && tabs[0].url);
         resolve();
       })
     ),
   ]).then(() => {
-    scopeProjectBound = !!(projectId && storage.perProject[projectId]);
+    scopeBound = !!(scopeKey && storage.perProject[scopeKey]);
     render();
   });
 })();

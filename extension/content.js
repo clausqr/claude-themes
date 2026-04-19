@@ -1,12 +1,20 @@
 /* Claude Themes — content script.
  * Runs at document_start on claude.ai. Resolves the active theme based on
- * URL (per-project binding > default), applies data-phosphor to <html>,
+ * URL scope (per-tab binding > default), applies data-phosphor to <html>,
  * listens for storage changes, and polls for SPA navigation since
  * claude.ai transitions via pushState without a full reload.
  *
- * Storage shape (v0.3+):
- *   { default: "amber", perProject: { "<project-id>": "cga", ... } }
- * Legacy (v0.2 and earlier) read once on upgrade:
+ * Bindable URL sections:
+ *   /chat/<conv-id>         individual conversations
+ *   /code/<session-id>      Claude Code sessions
+ *   /project(s)/<id>        Projects feature
+ *
+ * Scope key shape: "<section>/<id>" (e.g. "code/session_01ABC"). Ensures
+ * two different sections can never collide in storage.
+ *
+ * Storage (v0.3+):
+ *   { default: "amber", perProject: { "<scope-key>": "cga", ... } }
+ * Legacy (v0.2) read once on upgrade:
  *   { phosphor: "amber" }
  */
 
@@ -22,15 +30,17 @@
   let lastAppliedVariant = null;
   let lastPath = "";
 
-  function projectIdFromPath(pathname) {
-    const m = (pathname || "").match(/^\/projects?\/([^/?#]+)/);
-    return m ? m[1] : null;
+  function scopeKeyFromPath(pathname) {
+    const m = (pathname || "").match(
+      /^\/(chat|code|project|projects)\/([^/?#]+)/
+    );
+    return m ? m[1] + "/" + m[2] : null;
   }
 
   function resolveVariant() {
-    const id = projectIdFromPath(location.pathname);
-    if (id && Object.prototype.hasOwnProperty.call(cachedPerProject, id)) {
-      const v = cachedPerProject[id];
+    const key = scopeKeyFromPath(location.pathname);
+    if (key && Object.prototype.hasOwnProperty.call(cachedPerProject, key)) {
+      const v = cachedPerProject[key];
       if (VALID.has(v)) return v;
     }
     return VALID.has(cachedDefault) ? cachedDefault : FALLBACK;
