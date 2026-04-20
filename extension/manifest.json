@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Claude Themes",
-  "version": "0.3.2",
+  "version": "0.3.4",
   "description": "A growing catalog of themes for claude.ai. Bind a theme per project so tabs are distinguishable at a glance. Amber / Green / White / CGA / CRT / Synthwave.",
   "host_permissions": ["https://claude.ai/*"],
   "permissions": ["storage", "activeTab"],

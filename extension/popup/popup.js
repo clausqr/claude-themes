@@ -78,9 +78,10 @@
   }
 
   function choose(variant) {
-    if (scopeKey && scopeBound) {
+    if (scopeKey) {
       const nextMap = Object.assign({}, storage.perProject, { [scopeKey]: variant });
       storage.perProject = nextMap;
+      scopeBound = true;
       chrome.storage.sync.set({ perProject: nextMap }, render);
     } else {
       storage.default = variant;

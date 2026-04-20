@@ -311,31 +311,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
   color: var(--phosphor-bg) !important;
 }
 
-/* Block cursor: append a solid unicode block glyph that blinks. Appears at
-   the end of the composer area when focused — not perfectly positioned at
-   the actual insertion point (ProseMirror doesn't expose that cheaply), but
-   reads as "waiting for input" which is the BBS cue we want. */
-#turn-form:focus-within::after,
-.relative.bg-bg-000:focus-within::after,
-.ProseMirror:focus::after {
-  content: "\2588";             /* █ FULL BLOCK */
-  color: var(--phosphor-fg);
-  animation: dos-caret-blink 1.06s steps(2, start) infinite;
-  font-family: var(--font-ui);
-  display: inline-block;
-  vertical-align: baseline;
-  line-height: 1;
-  margin-left: 1px;
-  pointer-events: none;
-}
-@keyframes dos-caret-blink {
-  0%, 49.9%  { opacity: 1; }
-  50%, 100%  { opacity: 0; }
-}
-
-/* Also give every text input a block cursor via CSS caret-color + extra width
-   trick: override the native thin caret with a phosphor-colored one. */
-input, textarea {
+/* Native caret recolored to phosphor and (where supported) reshaped to a
+   block. Honours the real insertion point so it always aligns with typing. */
+.ProseMirror, input, textarea {
   caret-shape: block;           /* Safari 16+, Firefox (behind flag) */
 }
 
