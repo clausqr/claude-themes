@@ -3,8 +3,31 @@
 > A growing catalog of themes for [claude.ai](https://claude.ai). Assign a
 > palette to each project — tab-glance your way between them.
 
-![strip](docs/assets/strip.png)
-<sub>screenshot strip, six launch themes. See the full **[Theme Gallery →](docs/GALLERY.md)**</sub>
+![demo](docs/assets/demo.gif)
+<sub>six launch themes cycling on the same Claude conversation. See the full **[Theme Gallery →](docs/GALLERY.md)**</sub>
+
+<table>
+  <tr>
+    <td><img src="docs/assets/screenshots/01-amber.png" alt="Amber"></td>
+    <td><img src="docs/assets/screenshots/02-green.png" alt="Green"></td>
+    <td><img src="docs/assets/screenshots/03-white.png" alt="White"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>Amber</sub></td>
+    <td align="center"><sub>Green</sub></td>
+    <td align="center"><sub>White</sub></td>
+  </tr>
+  <tr>
+    <td><img src="docs/assets/screenshots/04-cga.png" alt="CGA"></td>
+    <td><img src="docs/assets/screenshots/05-crt.png" alt="CRT"></td>
+    <td><img src="docs/assets/screenshots/06-synthwave.png" alt="Synthwave"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub>CGA</sub></td>
+    <td align="center"><sub>CRT</sub></td>
+    <td align="center"><sub>Synthwave</sub></td>
+  </tr>
+</table>
 
 ## Why?
 

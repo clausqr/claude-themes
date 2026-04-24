@@ -17,3 +17,7 @@ dist/
 # Packaged store uploads
 claude-themes-chrome-*.zip
 claude-themes-firefox-*.zip
+
+# Playwright MCP session files and intermediate GIF frames
+.playwright-mcp/
+docs/assets/gif-frames/
