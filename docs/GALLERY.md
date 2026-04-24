@@ -4,9 +4,8 @@ Every theme currently shipping in **Claude Themes**, with the real
 inspiration, palette hex codes, and one-line guidance on when each
 reads best.
 
-Screenshots are captured against the same claude.ai conversation so only
-the palette varies. If a screenshot is missing, it's a capture-pending
-placeholder — see `docs/assets/` and `docs/ASSETS.md` for the shoot plan.
+Screenshots are captured against the same claude.ai-shaped conversation
+so only the palette varies.
 
 ---
 
