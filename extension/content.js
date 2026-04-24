@@ -19,8 +19,9 @@
   "use strict";
 
   const FALLBACK = "amber";
-  const VALID = new Set(["amber", "green", "white", "cga", "crt", "synthwave"]);
+  const VALID = new Set(["amber", "green", "white", "cga", "crt", "synthwave", "vanilla"]);
   const POLL_MS = 500;
+  const EXT_URL_PREFIX = chrome.runtime.getURL("");
 
   let cachedDefault = FALLBACK;
   let cachedPerProject = {};
@@ -46,12 +47,32 @@
     return VALID.has(cachedDefault) ? cachedDefault : FALLBACK;
   }
 
+  // Toggle every extension-origin stylesheet. Vanilla = opt out of all the
+  // aggressive !important overrides in content.css + variant files, leaving
+  // Claude's native look intact. Sheets stay loaded so flipping back is
+  // instant — we just flip .disabled.
+  function setExtensionStylesEnabled(enabled) {
+    for (const sheet of document.styleSheets) {
+      try {
+        if (sheet.href && sheet.href.indexOf(EXT_URL_PREFIX) === 0) {
+          sheet.disabled = !enabled;
+        }
+      } catch (e) {
+        // Cross-origin sheet, can't touch. Safe to skip.
+      }
+    }
+  }
+
   function applyVariant(variant) {
     if (variant === lastAppliedVariant) return;
     lastAppliedVariant = variant;
     document.documentElement.dataset.phosphor = variant;
+    setExtensionStylesEnabled(variant !== "vanilla");
     const bar = document.getElementById("dos-status-bar");
-    if (bar) bar.dataset.variant = variant.toUpperCase();
+    if (bar) {
+      bar.dataset.variant = variant.toUpperCase();
+      bar.style.display = variant === "vanilla" ? "none" : "";
+    }
   }
 
   function reapply() {

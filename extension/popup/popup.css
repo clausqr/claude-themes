@@ -89,6 +89,15 @@ html[data-phosphor="synthwave"] .statusbar {
   background: linear-gradient(to right, #ff2a6d, #ff00e1, #05d9e8);
   color: #0d0b1e;
 }
+html[data-phosphor="vanilla"] {
+  --bg: #1f1e1d;
+  --bg-inset: #141312;
+  --fg: #f5f4ee;
+  --fg-dim: #b8b4a7;
+  --fg-bright: #ffffff;
+  --border: #d97757;
+  --accent: #d97757;
+}
 
 * {
   border-radius: 0 !important;
