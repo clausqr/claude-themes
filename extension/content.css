@@ -555,6 +555,43 @@ body {
   color: var(--phosphor-bg) !important;
 }
 
+/* ---------- Opaque backgrounds for floating / overlay surfaces ------------
+   Claude ships plan panels, popovers, sticky toolbars, and artifact drawers
+   with semi-transparent Tailwind utilities (bg-bg-000/50, bg-bg-200/40,
+   bg-000/80, backdrop-blur-md, etc.). Without blur + translucency the text
+   underneath bleeds through and garbles the foreground. Force opaque
+   phosphor surfaces on every variant of those utilities. Radix popper /
+   portal content wrappers get explicit solid backgrounds too so any custom
+   dropdown that doesn't expose a role still reads cleanly.
+   --------------------------------------------------------------------------- */
+[class*="bg-bg-000/"],
+[class*="bg-bg-100/"],
+[class*="bg-bg-200/"],
+[class*="bg-bg-300/"],
+[class*="bg-bg-400/"],
+[class*="bg-bg-500/"],
+[class*="bg-000/"],
+[class*="bg-100/"],
+[class*="bg-200/"],
+[class*="bg-300/"],
+[class*="backdrop-blur"] {
+  background-color: var(--phosphor-bg) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-radix-popper-content-wrapper] > *,
+[data-radix-menu-content],
+[data-radix-popover-content],
+[data-radix-dropdown-menu-content],
+[data-state="open"][data-side],
+[data-state="open"][data-align] {
+  background: var(--phosphor-bg) !important;
+  color: var(--phosphor-fg) !important;
+  border: 2px double var(--phosphor-border) !important;
+}
+
 /* ---------- HR / dividers: convert to ASCII rule -------------------------- */
 hr {
   border: none !important;
