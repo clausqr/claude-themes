@@ -4,7 +4,7 @@ tagline: Six 1980s color schemes for claude.ai
 description: A growing catalog of themes for claude.ai. Bind a theme per project so tabs are distinguishable at a glance.
 url: https://clausqr.github.io
 baseurl: /claude-themes
-image: /claude-themes/assets/og-image.png
+image: https://clausqr.github.io/claude-themes/assets/og-image.png
 
 twitter:
   card: summary_large_image
@@ -13,4 +13,4 @@ defaults:
   - scope:
       path: ""
     values:
-      image: /claude-themes/assets/og-image.png
+      image: https://clausqr.github.io/claude-themes/assets/og-image.png
