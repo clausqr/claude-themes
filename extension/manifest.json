@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Claude Themes",
   "version": "1.1.0",
-  "description": "A growing catalog of themes for claude.ai. Bind a theme per project so tabs are distinguishable at a glance. Amber / Green / White / CGA / CRT / Synthwave / Vanilla.",
+  "description": "Reskin claude.ai with 6 retro palettes. Assign a color to each project — tab-glance your way between them.",
   "host_permissions": ["https://claude.ai/*"],
   "permissions": ["storage", "activeTab"],
   "content_scripts": [
