@@ -161,3 +161,7 @@ open a PR.
   We don't bundle MxPlus directly (licensing audit pending), but VT323 is
   inspired by the same VGA bitmap heritage.
 - BBS ANSI-art conventions from a thousand 1990s sysops.
+
+---
+
+<sub>Claude Themes is an unofficial community project. Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" is a trademark of Anthropic, PBC.</sub>
