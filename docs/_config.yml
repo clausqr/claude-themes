@@ -9,6 +9,10 @@ image: https://clausqr.github.io/claude-themes/assets/og-image.png
 twitter:
   card: summary_large_image
 
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
 defaults:
   - scope:
       path: ""
