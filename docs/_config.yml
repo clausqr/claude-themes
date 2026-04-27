@@ -1,0 +1,5 @@
+theme: jekyll-theme-cayman
+title: Claude Themes
+description: Retro themes for claude.ai. Bind a theme per project so tabs are distinguishable at a glance.
+url: https://clausqr.github.io
+baseurl: /claude-themes
