@@ -28,6 +28,8 @@ title: Claude Themes
 
 Chrome Web Store and Firefox AMO listings — coming this week. Until then, load the unpacked `extension/` directory in your browser's developer mode.
 
+> **Pro tip:** hit `F11` for browser fullscreen. The browser chrome disappears, the BBS chrome takes over the whole monitor, and you're back in 1987.
+
 ---
 
 <sub>Claude Themes is an unofficial community project. Not affiliated with, endorsed by, or sponsored by Anthropic. "Claude" is a trademark of Anthropic, PBC.</sub>

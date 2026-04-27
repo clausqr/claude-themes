@@ -75,6 +75,10 @@ the extension and everything works.
 Chrome Web Store + Firefox Add-ons listings coming — see
 [docs/RELEASE.md](docs/RELEASE.md).
 
+> **Pro tip:** hit `F11` for browser fullscreen. The browser chrome
+> disappears, the BBS chrome takes over the whole monitor, and you're
+> back in 1987.
+
 ## Add your own theme
 
 A theme is ~15 lines of CSS scoped under `html[data-phosphor="<name>"]`.
