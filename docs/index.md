@@ -6,7 +6,11 @@ title: Claude Themes
 
 > Retro themes for [claude.ai](https://claude.ai). Bind a palette per project so tabs are distinguishable at a glance.
 
-![demo](assets/demo.gif)
+![Three Claude tabs, three palettes — WORK in amber, PERSONAL in synthwave, SCRATCHPAD in CGA](assets/tab-strip.png)
+
+<sub>Three Claude projects, three palettes. Your peripheral vision does the context switching for you.</sub>
+
+![Six themes cycling on the same Claude conversation](assets/demo.gif)
 
 ## Six themes ship today
 
